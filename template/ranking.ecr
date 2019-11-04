@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>AtCoder Marathon Ranking (Unofficial)</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<style type="text/css">
+		body {
+			margin: 10px;
+		}
+		#container {
+			max-width: none;
+		}
+		span.username {
+			font-weight: bold;
+		}
+		th {
+			position: sticky;
+			top: 0;
+		}
+		thead th {
+			top: 0;
+		}
+		th, td {
+			text-align: center;
+			background-color: white;
+		}
+		.cell-border-right {
+			border-right: 1px solid #dee2e6;
+		}
+	</style>
+</head>
+<body>
+	<h1>AtCoder Marathon Ranking (Unofficial)</h1>
+	<div class="container" id="container">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>handle</th>
+				<th class="col-xs-1">GP30</th>
+				<th class="col-xs-1">win</th>
+				<th class="col-xs-1">top5</th>
+				<th class="col-xs-1">top10</th>
+				<th class="col-xs-1 cell-border-right">参加数</th>
+				<%- CONTESTS.each do |contest| -%>
+				<th class="col-xs-1"><%= contest.short_name %></th>
+				<%- end -%>
+			</tr>
+		</thead>
+		<tbody>
+<%- persons.each do |person| -%>
+<tr>
+	<td><span class="username" style="color:<%= person.css_color %>;"><%= person.name %></span></td>
+	<td><%= person.sum %></td>
+	<td><%= person.win %></td>
+	<td><%= person.top5 %></td>
+	<td><%= person.top10 %></td>
+	<td class="cell-border-right"><%= person.count %></td>
+	<%- CONTESTS.each_with_index do |contest, i| -%>
+	<td><%= person.points[i] || '-' %></td>
+	<%- end -%>
+</tr>
+<%- end -%>			
+		</tbody>
+	</table>
+	</div>
+</body>
+</html>
