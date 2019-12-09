@@ -74,7 +74,7 @@ CONTESTS = [
 DATA_PATH = "data/"
 
 def process_contest(contest, contest_index, persons)
-  ps = [] of {String, Int64}
+  ps = [] of {Int64, Int64, String}
   contest.ids.each do |contest_id|
     filename = "#{DATA_PATH}#{contest_id}.json"
     if !File.exists?(filename)
@@ -95,7 +95,7 @@ def process_contest(contest, contest_index, persons)
         name = p["UserScreenName"].as_s
         score = p["TotalResult"]["Score"].as_i64
         if score > 0 && ps.all? { |p| p[0] != name }
-          ps << {name, score}
+          ps << {score, 0i64, name} # TODO: consider elapsed?
         end
       end
     else
@@ -103,22 +103,23 @@ def process_contest(contest, contest_index, persons)
         next if p["TotalResult"]["Accepted"].as_i == 0 # 正のスコアを得ているかの判定
         name = p["UserScreenName"].as_s
         score = p["TotalResult"]["Score"].as_i64
+        time = p["TotalResult"]["Elapsed"].as_i64
         if score > 0 && ps.all? { |p| p[0] != name }
-          ps << {name, -score}
+          ps << {-score, time, name}
         end
       end
     end
   end
   # puts "#{contest.short_name} #{ps.size}"
   prev_rank = 0
-  ps.sort_by! { |p| p[1] }
+  ps.sort!
   ps.each_with_index do |p, i|
-    rank = i > 0 && ps[i - 1][1] == p[1] ? prev_rank : i
-    if !persons.has_key?(p[0])
-      person = Person.new(p[0])
-      persons[p[0]] = person
+    rank = i > 0 && ps[i - 1][0] == p[0] && ps[i - 1][1] == p[1] ? prev_rank : i
+    if !persons.has_key?(p[2])
+      person = Person.new(p[2])
+      persons[p[2]] = person
     else
-      person = persons[p[0]]
+      person = persons[p[2]]
     end
     if rank < GP30.size
       person.sum += GP30[rank]
