@@ -51,6 +51,7 @@ end
 GP30 = [100, 75, 60, 50, 45, 40, 36, 32, 29, 26, 24, 22, 20, 18, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
 CONTESTS = [
+  Contest.new("HTTF20本", ["future-contest-2020-final-2", "future-contest-2020-final-2-open"], false),
   Contest.new("HTTF20予", ["future-contest-2020-qual"], false),
   Contest.new("aspro4", ["asprocon4"], false),
   Contest.new("ヤマト", ["kuronekoyamato-contest2019"], false),
@@ -110,7 +111,8 @@ def process_contest(contest, contest_index, persons)
   end
   # puts "#{contest.short_name} #{ps.size}"
   prev_rank = 0
-  ps.sort_by { |p| p[1] }.each_with_index do |p, i|
+  ps.sort_by! { |p| p[1] }
+  ps.each_with_index do |p, i|
     rank = i > 0 && ps[i - 1][1] == p[1] ? prev_rank : i
     if !persons.has_key?(p[0])
       person = Person.new(p[0])
