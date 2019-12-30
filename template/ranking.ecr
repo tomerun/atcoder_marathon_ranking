@@ -45,7 +45,7 @@
 				<th class="col-xs-1">top10</th>
 				<th class="col-xs-1 cell-border-right">参加数</th>
 				<%- CONTESTS.each do |contest| -%>
-				<th class="col-xs-1"><%= contest.short_name %></th>
+				<th class="col-xs-1"><a href="https://atcoder.jp/contests/<%= contest.ids[0] %>/standings"><%= contest.short_name %></a></th>
 				<%- end -%>
 			</tr>
 		</thead>
