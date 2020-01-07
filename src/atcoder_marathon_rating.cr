@@ -103,7 +103,7 @@ def process_contest(contest, contest_index, persons)
       end
     else
       json["StandingsData"].as_a.each do |p|
-        next if p["TotalResult"]["Accepted"].as_i == 0 # 正のスコアを得ているかの判定
+        next if p["TotalResult"]["Score"].as_i64 == 0 # 正のスコアを得ているかの判定
         name = p["UserScreenName"].as_s
         score = p["TotalResult"]["Score"].as_i64
         time = p["TotalResult"]["Elapsed"].as_i64
