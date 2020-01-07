@@ -51,6 +51,7 @@ end
 GP30 = [100, 75, 60, 50, 45, 40, 36, 32, 29, 26, 24, 22, 20, 18, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
 CONTESTS = [
+  Contest.new("aspro5", ["asprocon5"], false),
   Contest.new("2HC2019-2", ["hokudai-hitachi2019-2"], false),
   Contest.new("2HC2019-1", ["hokudai-hitachi2019-1"], false),
   Contest.new("HTTF20本", ["future-contest-2020-final-2", "future-contest-2020-final-2-open"], false),
