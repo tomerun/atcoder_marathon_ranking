@@ -26,6 +26,9 @@
 			text-align: center;
 			background-color: white;
 		}
+		span.rank {
+			color: #ccc;
+		}
 		.cell-border-right {
 			border-right: 1px solid #dee2e6;
 		}
@@ -40,10 +43,11 @@
 			<tr>
 				<th>handle</th>
 				<th class="col-xs-1">GP30</th>
+				<th class="col-xs-1">min rank</th>
 				<th class="col-xs-1">win</th>
 				<th class="col-xs-1">top5</th>
 				<th class="col-xs-1">top10</th>
-				<th class="col-xs-1 cell-border-right">参加数</th>
+				<th class="col-xs-1 cell-border-right">参加</th>
 				<%- CONTESTS.each do |contest| -%>
 				<th class="col-xs-1"><a href="https://atcoder.jp/contests/<%= contest.ids[0] %>/standings"><%= contest.short_name %></a></th>
 				<%- end -%>
@@ -54,12 +58,17 @@
 <tr>
 	<td><span class="username" style="color:<%= person.css_color %>;"><%= person.name %></span></td>
 	<td><%= person.sum %></td>
+	<td><%= person.min_rank + 1 %></td>
 	<td><%= person.win %></td>
 	<td><%= person.top5 %></td>
 	<td><%= person.top10 %></td>
 	<td class="cell-border-right"><%= person.count %></td>
 	<%- CONTESTS.each_with_index do |contest, i| -%>
-	<td><%= person.points[i] || '-' %></td>
+		<%- if person.points[i] -%>
+		<td><%= person.points[i] %><span class="rank">(<%= person.ranks[i].not_nil! + 1 %>)</span></td>
+		<%- else -%>
+		<td>-</td>
+		<%- end -%>
 	<%- end -%>
 </tr>
 <%- end -%>			

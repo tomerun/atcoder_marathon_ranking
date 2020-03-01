@@ -10,7 +10,7 @@ class Contest
 end
 
 class Person
-  property :name, :sum, :win, :top5, :top10, :count, :points
+  property :name, :sum, :win, :top5, :top10, :count, :points, :ranks
 
   def initialize(@name : String)
     @sum = 0
@@ -19,6 +19,7 @@ class Person
     @top10 = 0
     @count = 0
     @points = Array(Int32 | Nil).new(CONTESTS.size, nil)
+    @ranks = Array(Int32 | Nil).new(CONTESTS.size, nil) # 0 origin
   end
 
   def to_s(io)
@@ -45,6 +46,10 @@ class Person
     else
       return "#000000" # black
     end
+  end
+
+  def min_rank
+    return @ranks.compact.min
   end
 end
 
@@ -134,6 +139,7 @@ def process_contest(contest, contest_index, persons)
     person.top5 += 1 if rank < 5
     person.top10 += 1 if rank < 10
     person.count += 1
+    person.ranks[contest_index] = rank
     prev_rank = rank
   end
 end
@@ -144,7 +150,7 @@ def main
   CONTESTS.each_with_index do |contest, i|
     process_contest(contest, i, persons_hash)
   end
-  persons = persons_hash.values.sort_by { |p| {-p.sum, -p.win, -p.top5, -p.top10, -p.count, p.name} }
+  persons = persons_hash.values.sort_by { |p| {-p.sum, p.min_rank, -p.win, -p.top5, -p.top10, -p.count, p.name} }
   puts ECR.render("template/ranking.ecr")
   # persons.each do |p|
   #   puts p
