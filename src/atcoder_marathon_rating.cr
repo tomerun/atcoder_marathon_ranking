@@ -131,13 +131,14 @@ def load_config
     mult = v["mult"].as_bool
     CONTESTS << Contest.new(contest_name.as_s, ids, mult)
   end
+  CONTESTS.reverse!
 end
 
 def main
   Dir.mkdir(DATA_PATH) if !Dir.exists?(DATA_PATH)
   load_config()
   persons_hash = {} of String => Person
-  CONTESTS.reverse.each_with_index do |contest, i|
+  CONTESTS.each_with_index do |contest, i|
     process_contest(contest, i, persons_hash)
   end
   persons = persons_hash.values.sort_by { |p| {-p.sum, p.min_rank, -p.win, -p.top5, -p.top10, -p.count, p.name} }
