@@ -97,7 +97,6 @@ def process_contest(contest, contest_index, persons)
       end
     end
   end
-  # puts "#{contest.short_name} #{ps.size}"
   prev_rank = 0
   ps.sort!
   ps.each_with_index do |p, i|
@@ -143,9 +142,6 @@ def main
   end
   persons = persons_hash.values.sort_by { |p| {-p.sum, p.min_rank, -p.win, -p.top5, -p.top10, -p.count, p.name} }
   puts ECR.render("template/ranking.ecr")
-  # persons.each do |p|
-  #   puts p
-  # end
 end
 
 main
