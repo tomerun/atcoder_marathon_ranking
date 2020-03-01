@@ -1,0 +1,32 @@
+contests:
+  第1回予選:
+      contest_ids:
+        - rco-contest-2017-qual
+      mult: true
+  第1回本戦:
+      contest_ids:
+        - rco-contest-2017-final
+        - rco-contest-2017-final-open
+      mult: true
+  第2回予選:
+      contest_ids:
+        - rco-contest-2018-qual
+      mult: true
+  第2回本戦:
+      contest_ids:
+        - rco-contest-2018-final
+        - rco-contest-2018-final-open
+      mult: true
+  第3回予選:
+      contest_ids:
+        - rco-contest-2019-qual
+      mult: true
+  第3回本戦:
+      contest_ids:
+        - rco-contest-2019-final
+        - rco-contest-2019-final-open
+      mult: true
+  第4回予選:
+      contest_ids:
+        - rcl-contest-2020-qual
+      mult: true
