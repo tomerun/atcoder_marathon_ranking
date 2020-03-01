@@ -1,0 +1,88 @@
+contests:
+  大根1:
+      contest_ids:
+        - chokudai001
+      mult: false
+  大根2:
+      contest_ids:
+        - chokudai002
+      mult: false
+  大根3:
+      contest_ids:
+        - chokudai003
+      mult: false
+  新概念1:
+      contest_ids:
+        - hokudai-hitachi2017-1
+      mult: false
+  新概念2:
+      contest_ids:
+        - hokudai-hitachi2017-2
+      mult: false
+  wn2017:
+    contest_ids:
+      - wn2017_1
+    mult: false
+  HTTF18予:
+    contest_ids:
+      - future-contest-2018-qual
+    mult: false
+  HTTF18本:
+    contest_ids:
+      - future-contest-2018-final
+      - future-contest-2018-final-open
+    mult: false
+  HTTF19予:
+    contest_ids:
+      - future-contest-2019-qual
+    mult: false
+  HTTF19本:
+    contest_ids:
+      - future-contest-2019-final
+      - future-contest-2019-final-open
+    mult: false
+  aspro2:
+    contest_ids:
+      - asprocon2
+    mult: false
+  新概念3:
+    contest_ids:
+      - hokudai-hitachi2018
+    mult: true
+  CADDi:
+    contest_ids:
+      - caddi2019
+    mult: false
+  aspro3:
+    contest_ids:
+      - asprocon3
+    mult: false
+  ヤマト:
+    contest_ids:
+      - kuronekoyamato-contest2019
+    mult: false
+  aspro4:
+    contest_ids:
+      - asprocon4
+    mult: false
+  HTTF20予:
+    contest_ids:
+      - future-contest-2020-qual
+    mult: false
+  HTTF20本:
+    contest_ids:
+      - future-contest-2020-final-2
+      - future-contest-2020-final-2-open
+    mult: false
+  2HC2019-1:
+    contest_ids:
+      - hokudai-hitachi2019-1
+    mult: false
+  2HC2019-2:
+    contest_ids:
+      - hokudai-hitachi2019-2
+    mult: false
+  aspro5:
+    contest_ids:
+      - asprocon5
+    mult: false

@@ -1,6 +1,7 @@
 require "ecr/macros"
 require "http/client"
 require "json"
+require "yaml"
 
 class Contest
   property :short_name, :ids, :mul
@@ -55,29 +56,7 @@ end
 
 GP30 = [100, 75, 60, 50, 45, 40, 36, 32, 29, 26, 24, 22, 20, 18, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 
-CONTESTS = [
-  Contest.new("aspro5", ["asprocon5"], false),
-  Contest.new("2HC2019-2", ["hokudai-hitachi2019-2"], false),
-  Contest.new("2HC2019-1", ["hokudai-hitachi2019-1"], false),
-  Contest.new("HTTF20本", ["future-contest-2020-final-2", "future-contest-2020-final-2-open"], false),
-  Contest.new("HTTF20予", ["future-contest-2020-qual"], false),
-  Contest.new("aspro4", ["asprocon4"], false),
-  Contest.new("ヤマト", ["kuronekoyamato-contest2019"], false),
-  Contest.new("aspro3", ["asprocon3"], false),
-  Contest.new("CADDi", ["caddi2019"], false),
-  Contest.new("新概念3", ["hokudai-hitachi2018"], true),
-  Contest.new("aspro2", ["asprocon2"], false),
-  Contest.new("HTTF19本", ["future-contest-2019-final", "future-contest-2019-final-open"], false),
-  Contest.new("HTTF19予", ["future-contest-2019-qual"], false),
-  Contest.new("HTTF18本", ["future-contest-2018-final", "future-contest-2018-final-open"], false),
-  Contest.new("HTTF18予", ["future-contest-2018-qual"], false),
-  Contest.new("wn2017", ["wn2017_1"], false),
-  Contest.new("新概念2", ["hokudai-hitachi2017-2"], false),
-  Contest.new("新概念1", ["hokudai-hitachi2017-1"], false),
-  Contest.new("大根3", ["chokudai003"], false),
-  Contest.new("大根2", ["chokudai002"], false),
-  Contest.new("大根1", ["chokudai001"], false),
-]
+CONTESTS = [] of Contest
 
 DATA_PATH = "data/"
 
@@ -144,10 +123,22 @@ def process_contest(contest, contest_index, persons)
   end
 end
 
+def load_config
+  config_path = ARGV.empty? ? "config.yml" : ARGV[0]
+  config_data = YAML.parse(File.read(config_path))
+  config_data["contests"].as_h.each do |contest_name, contest_value|
+    v = contest_value.as_h
+    ids = v["contest_ids"].as_a.map(&.as_s)
+    mult = v["mult"].as_bool
+    CONTESTS << Contest.new(contest_name.as_s, ids, mult)
+  end
+end
+
 def main
   Dir.mkdir(DATA_PATH) if !Dir.exists?(DATA_PATH)
+  load_config()
   persons_hash = {} of String => Person
-  CONTESTS.each_with_index do |contest, i|
+  CONTESTS.reverse.each_with_index do |contest, i|
     process_contest(contest, i, persons_hash)
   end
   persons = persons_hash.values.sort_by { |p| {-p.sum, p.min_rank, -p.win, -p.top5, -p.top10, -p.count, p.name} }
