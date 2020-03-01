@@ -24,7 +24,12 @@
 		}
 		th, td {
 			text-align: center;
+		}
+		th {
 			background-color: white;
+		}
+		tr.person:hover {
+			background-color: #EEE;
 		}
 		span.rank {
 			color: #ccc;
@@ -55,7 +60,7 @@
 		</thead>
 		<tbody>
 <%- persons.each do |person| -%>
-<tr>
+<tr class="person">
 	<td><span class="username" style="color:<%= person.css_color %>;"><%= person.name %></span></td>
 	<td><%= person.sum %></td>
 	<td><%= person.min_rank + 1 %></td>
