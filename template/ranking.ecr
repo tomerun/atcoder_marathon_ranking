@@ -46,6 +46,7 @@
 	<table class="table">
 		<thead>
 			<tr>
+				<th class="col-xs-1"></th>
 				<th>handle</th>
 				<th class="col-xs-1">GP30</th>
 				<th class="col-xs-1">min rank</th>
@@ -61,6 +62,7 @@
 		<tbody>
 <%- persons.each do |person| -%>
 <tr class="person">
+	<td><%= person.total_rank %></td>
 	<td><span class="username" style="color:<%= person.css_color %>;"><%= person.name %></span></td>
 	<td><%= person.sum %></td>
 	<td><%= person.min_rank + 1 %></td>
