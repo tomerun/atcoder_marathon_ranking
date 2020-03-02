@@ -1,12 +1,12 @@
-name: atcoder_marathon_rating
+name: atcoder_marathon_ranking
 version: 0.1.0
 
 authors:
   - Nobuaki Tanaka <tomerunmail@gmail.com>
 
 targets:
-  atcoder_marathon_rating:
-    main: src/atcoder_marathon_rating.cr
+  atcoder_marathon_ranking:
+    main: src/atcoder_marathon_ranking.cr
 
 crystal: 0.29.0
 
