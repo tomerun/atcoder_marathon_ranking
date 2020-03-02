@@ -11,7 +11,7 @@ class Contest
 end
 
 class Person
-  property :name, :sum, :win, :top5, :top10, :count, :points, :ranks
+  property :name, :sum, :win, :top5, :top10, :count, :points, :ranks, :total_rank
 
   def initialize(@name : String)
     @sum = 0
@@ -21,6 +21,7 @@ class Person
     @count = 0
     @points = Array(Int32 | Nil).new(CONTESTS.size, nil)
     @ranks = Array(Int32 | Nil).new(CONTESTS.size, nil) # 0 origin
+    @total_rank = -1
   end
 
   def to_s(io)
@@ -142,6 +143,13 @@ def main
     process_contest(contest, i, persons_hash)
   end
   persons = persons_hash.values.sort_by { |p| {-p.sum, p.min_rank, -p.win, -p.top5, -p.top10, -p.count, p.name} }
+  persons.each_with_index do |p, i|
+    if i > 0 && persons[i - 1].sum == p.sum
+      p.total_rank = persons[i - 1].total_rank
+    else
+      p.total_rank = i + 1
+    end
+  end
   puts ECR.render("template/ranking.ecr")
 end
 
