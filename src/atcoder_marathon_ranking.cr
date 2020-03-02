@@ -29,25 +29,25 @@ class Person
   end
 
   def css_color
-    if @sum >= 500 && @top5 >= 3
-      return "#ff0000" # red
-    elsif @sum >= 300 && @top5 >= 1
-      return "#ff8000" # orange
-    elsif @sum >= 150 && @top10 >= 1
-      return "#c0c000" # yellow
-    elsif @sum >= 75
-      return "#0000ff" # blue
-    elsif @sum >= 40
-      return "#00c0c0" # cyan
-    elsif @sum >= 20
-      return "#008000" # green
-    elsif @sum >= 1
-      return "#804000" # brown
-    elsif @count >= 1
-      return "#808080" # gray
-    else
-      return "#000000" # black
-    end
+    # if @sum >= 500 && @top5 >= 3
+    #   return "#ff0000" # red
+    # elsif @sum >= 300 && @top5 >= 1
+    #   return "#ff8000" # orange
+    # elsif @sum >= 150 && @top10 >= 1
+    #   return "#c0c000" # yellow
+    # elsif @sum >= 75
+    #   return "#0000ff" # blue
+    # elsif @sum >= 40
+    #   return "#00c0c0" # cyan
+    # elsif @sum >= 20
+    #   return "#008000" # green
+    # elsif @sum >= 1
+    #   return "#804000" # brown
+    # elsif @count >= 1
+    #   return "#808080" # gray
+    # else
+    return "#000000" # black
+    # end
   end
 
   def min_rank
@@ -142,7 +142,7 @@ def main
   CONTESTS.each_with_index do |contest, i|
     process_contest(contest, i, persons_hash)
   end
-  persons = persons_hash.values.sort_by { |p| {-p.sum, p.min_rank, -p.win, -p.top5, -p.top10, -p.count, p.name} }
+  persons = persons_hash.values.select { |p| p.sum > 0 }.sort_by { |p| {-p.sum, p.min_rank, -p.win, -p.top5, -p.top10, -p.count, p.name} }
   persons.each_with_index do |p, i|
     if i > 0 && persons[i - 1].sum == p.sum
       p.total_rank = persons[i - 1].total_rank
