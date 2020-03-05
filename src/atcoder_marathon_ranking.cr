@@ -61,10 +61,73 @@ CONTESTS = [] of Contest
 
 DATA_PATH = "data/"
 
-def process_contest(contest, contest_index, persons)
+def calc_scores_mul(contest) : Array(Tuple(Int64, Int64, String))
+  # collect scores
+  contestants = Array(Tuple(String, Array(Int64))).new # contestant_name, scores
+  tasks = Array(String).new
+  contest.ids.each do |contest_id|
+    json = JSON.parse(File.read(contest_data_path(contest_id)))
+    cur_tasks = json["TaskInfo"].as_a.map { |t| t.as_h["TaskScreenName"].as_s }
+    if tasks.empty?
+      tasks = cur_tasks
+    else
+      if tasks != cur_tasks
+        raise Exception.new("Taskがコンテスト間で違っている")
+      end
+    end
+    json["StandingsData"].as_a.map(&.as_h).each do |p|
+      name = p["UserScreenName"].as_s
+      scores = tasks.map do |task_name|
+        task_result = p["TaskResults"].as_h
+        task_result.has_key?(task_name) ? task_result[task_name].as_h["Additional"].as_a[0].as_i64 : -1i64
+      end
+      contestants << {name, scores}
+    end
+  end
+  contestants = contestants.reject { |c| c[1].all?(-1) } # remove who submitted nothing
+
+  # convert to rank
+  tasks.size.times do |i|
+    contestants.sort_by! { |c| -c[1][i] }
+    prev = contestants[0][1][i]
+    contestants[0][1][i] = 1
+    1.upto(contestants.size - 1) do |j|
+      if contestants[j][1][i] == prev || contestants[j][1][i] == -1 && prev == 0
+        contestants[j][1][i] = contestants[j - 1][1][i]
+      else
+        prev = contestants[j][1][i]
+        contestants[j][1][i] = j.to_i64 + 1
+      end
+    end
+  end
+  return contestants.map { |c| {c[1].product, 0i64, c[0]} }
+end
+
+def calc_scores_normal(contest) : Array(Tuple(Int64, Int64, String))
   ps = [] of {Int64, Int64, String}
   contest.ids.each do |contest_id|
-    filename = "#{DATA_PATH}#{contest_id}.json"
+    json = JSON.parse(File.read(contest_data_path(contest_id)))
+    json["StandingsData"].as_a.each do |p|
+      next if p["TotalResult"]["Score"].as_i64 == 0 # 正のスコアを得ているかの判定
+      name = p["UserScreenName"].as_s
+      score = p["TotalResult"]["Score"].as_i64
+      time = p["TotalResult"]["Elapsed"].as_i64
+      if score > 0 && ps.all? { |p| p[0] != name }
+        ps << {-score, time, name}
+      end
+    end
+  end
+  return ps
+end
+
+def contest_data_path(contest_id)
+  return "#{DATA_PATH}#{contest_id}.json"
+end
+
+def process_contest(contest, contest_index, persons)
+  # download
+  contest.ids.each do |contest_id|
+    filename = contest_data_path(contest_id)
     if !File.exists?(filename)
       puts "download #{contest_id}..."
       if contest.mul
@@ -72,31 +135,15 @@ def process_contest(contest, contest_index, persons)
       else
         response = HTTP::Client.get("https://atcoder.jp/contests/#{contest_id}/standings/json")
       end
-      json = JSON.parse(response.body)
       File.write(filename, response.body)
       sleep(2)
-    else
-      json = JSON.parse(File.read(filename))
     end
-    if contest.mul
-      json["StandingsData"].as_a.each do |p|
-        name = p["UserScreenName"].as_s
-        score = p["TotalResult"]["Score"].as_i64
-        if score > 0 && ps.all? { |p| p[0] != name }
-          ps << {score, 0i64, name} # TODO: consider elapsed?
-        end
-      end
-    else
-      json["StandingsData"].as_a.each do |p|
-        next if p["TotalResult"]["Score"].as_i64 == 0 # 正のスコアを得ているかの判定
-        name = p["UserScreenName"].as_s
-        score = p["TotalResult"]["Score"].as_i64
-        time = p["TotalResult"]["Elapsed"].as_i64
-        if score > 0 && ps.all? { |p| p[0] != name }
-          ps << {-score, time, name}
-        end
-      end
-    end
+  end
+
+  if contest.mul
+    ps = calc_scores_mul(contest)
+  else
+    ps = calc_scores_normal(contest)
   end
   prev_rank = 0
   ps.sort!
