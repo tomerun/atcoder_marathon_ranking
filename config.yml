@@ -86,3 +86,7 @@ contests:
     contest_ids:
       - asprocon5
     mult: false
+  aspro6:
+    contest_ids:
+      - asprocon6
+    mult: false
