@@ -90,3 +90,7 @@ contests:
     contest_ids:
       - asprocon6
     mult: false
+  HTTF21予:
+    contest_ids:
+      - future-contest-2021-qual
+    mult: false
