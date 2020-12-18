@@ -94,3 +94,8 @@ contests:
     contest_ids:
       - future-contest-2021-qual
     mult: false
+  HTTF21本:
+    contest_ids:
+      - future-contest-2021-final
+      - future-contest-2021-final-open
+    mult: false
